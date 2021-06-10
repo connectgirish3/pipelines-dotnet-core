@@ -1,31 +1,21 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'windows-latest'
+
 variables:
-  buildconfiguration: Release
-stages:
-  - stage: Build
-    displayName: "Build .net core"
-    jobs:
-      - job: restore
-        displayName: "restore"
-        steps:
-          - checkout: self
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'restore'
-              projects: '*.csproj'
-              feedsToUse: 'config'
+  buildConfiguration: 'Release'
 
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    feedsToUse: 'select'
+    vstsFeed: 'my-vsts-feed' # A series of numbers and letters
 
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'build'
-              arguments: '--configuration $(buildconfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration)'
