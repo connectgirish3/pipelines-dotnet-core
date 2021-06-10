@@ -21,7 +21,9 @@ stages:
           - task: DotNetCoreCLI@2
             inputs:
               command: 'restore'
+              projects: '*.csproj'
               feedsToUse: 'config'
+
 
           - task: DotNetCoreCLI@2
             inputs:
